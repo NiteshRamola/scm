@@ -6,9 +6,11 @@ import in.niteshramola.scm.helpers.Message;
 import in.niteshramola.scm.helpers.MessageType;
 import in.niteshramola.scm.services.UserService;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -61,7 +63,13 @@ public class PageController {
     }
 
     @RequestMapping(value = "/do-register", method = RequestMethod.POST)
-    public String doRegister(@ModelAttribute("userForm") UserForm userForm, HttpSession session) {
+    public String doRegister(@Valid @ModelAttribute UserForm userForm, BindingResult rBindingResult, HttpSession session) {
+
+        if(rBindingResult.hasErrors()){
+            System.out.println("Validation failed");
+            return "register";
+        }
+
         User user = new User();
         user.setName(userForm.getName());
         user.setEmail(userForm.getEmail());

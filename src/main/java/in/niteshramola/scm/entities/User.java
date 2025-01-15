@@ -1,6 +1,7 @@
 package in.niteshramola.scm.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -15,16 +16,18 @@ public class User {
     @Id
     private String userId;
 
-    @Column(nullable = false)
+    @NotBlank(message = "Name is required")
     private String name;
 
-    @Column(unique = true, nullable = false)
+    @NotBlank(message = "Email is required")
+    @Column(unique = true)
     private String email;
 
-    @Column(unique = true, nullable = false)
+    @NotBlank(message = "Phone is required")
+    @Column(unique = true)
     private String phone;
 
-    @Column(nullable = false)
+    @NotBlank(message = "Password is required")
     @Getter(AccessLevel.NONE)
     private String password;
 
