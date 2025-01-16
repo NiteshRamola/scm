@@ -1,11 +1,14 @@
 package in.niteshramola.scm.services.impl;
 
 import in.niteshramola.scm.entities.User;
+import in.niteshramola.scm.helpers.AppConstants;
 import in.niteshramola.scm.helpers.ResourceNotFoundException;
 import in.niteshramola.scm.repositories.UserRepository;
 import in.niteshramola.scm.services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,8 +20,11 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
-    public UserServiceImpl(UserRepository userRepository) {
+    private final PasswordEncoder passwordEncoder;
+
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -28,7 +34,10 @@ public class UserServiceImpl implements UserService {
         String userId = UUID.randomUUID().toString();
         user.setUserId(userId);
 
-//        user.setPassword(password);
+        String password = passwordEncoder.encode(user.getPassword());
+        user.setPassword(password);
+
+        user.setRoleList(List.of(AppConstants.ROLE_USER));
 
         return userRepository.save(user);
     }
