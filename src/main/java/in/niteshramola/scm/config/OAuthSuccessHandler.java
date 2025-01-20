@@ -50,6 +50,7 @@ public class OAuthSuccessHandler implements AuthenticationSuccessHandler {
         user.setEnabled(true);
         user.setEmailVerified(true);
         user.setPassword("password");
+        user.setProviderId(oauth2User.getName());
 
         if (authorizedClientRegistrationId.equalsIgnoreCase("google")) {
 
@@ -58,11 +59,13 @@ public class OAuthSuccessHandler implements AuthenticationSuccessHandler {
             user.setProfilePic(oauth2User.getAttribute("picture"));
             user.setAbout("User created using Google OAuth");
             user.setProvider(Providers.GOOGLE);
-            user.setProviderId(oauth2User.getName());
         } else if (authorizedClientRegistrationId.equalsIgnoreCase("github")) {
 
-            user.setName(oauth2User.getAttribute("name"));
-            user.setEmail(oauth2User.getAttribute("email"));
+            String email = oauth2User.getAttribute("email") != null ? oauth2User.getAttribute("email") : oauth2User.getAttribute("login") + "@gmail.com";
+            String name = oauth2User.getAttribute("name") != null ? oauth2User.getAttribute("name") : oauth2User.getAttribute("login");
+
+            user.setName(name);
+            user.setEmail(email);
             user.setProfilePic(oauth2User.getAttribute("avatar_url"));
             user.setAbout("User created using Github OAuth");
             user.setProvider(Providers.GITHUB);
