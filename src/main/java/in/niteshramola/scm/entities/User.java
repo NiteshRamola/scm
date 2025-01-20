@@ -27,11 +27,8 @@ public class User implements UserDetails {
     @Column(unique = true)
     private String email;
 
-    @NotBlank(message = "Phone is required")
-    @Column(unique = true)
     private String phone;
 
-    @NotBlank(message = "Password is required")
     @Getter(AccessLevel.NONE)
     private String password;
 
